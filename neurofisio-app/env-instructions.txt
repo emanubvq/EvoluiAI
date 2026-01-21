@@ -1,0 +1,8 @@
+Please create a file named .env.local in the root of the project (neurofisio-app) and paste the following content:
+
+NEXT_PUBLIC_SUPABASE_URL=https://taeydljxtzrllkwodarl.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRhZXlkbGp4dHpybGxrd29kYXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MjczNTMsImV4cCI6MjA4NDUwMzM1M30.YdxG-dlmd5Z92_PZ62cMaQ0MxjdpJJB8S8EvO9wbcGM
+
+# Add your AI keys here
+OPENAI_API_KEY=your_openai_key_here
+GOOGLE_API_KEY=your_google_gemini_key_here
