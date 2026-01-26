@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Mic, Trash2, Calendar, Activity, ChevronRight, Copy } from "lucide-react";
 import { Patient } from "@/lib/types";
-import { differenceInDays } from "date-fns";
+import { differenceInCalendarDays } from "date-fns";
 
 interface BedTableProps {
     data: Patient[];
@@ -22,7 +22,7 @@ interface BedTableProps {
 export function BedTable({ data, onSelectPatient, onClearPatient }: BedTableProps) {
     const calculateDaysVPM = (date: Date | null) => {
         if (!date) return "-";
-        const days = differenceInDays(new Date(), new Date(date));
+        const days = differenceInCalendarDays(new Date(), new Date(date));
         return `${days} dias`;
     };
 
@@ -33,7 +33,7 @@ export function BedTable({ data, onSelectPatient, onClearPatient }: BedTableProp
 
     const handleCopy = (bed: Patient) => {
         const daysVPMString = bed.vmiStartDate
-            ? `${differenceInDays(new Date(), new Date(bed.vmiStartDate))} dias`
+            ? `${differenceInCalendarDays(new Date(), new Date(bed.vmiStartDate))} dias`
             : "0 dias";
 
         const text = `
@@ -97,7 +97,7 @@ Intercorrências: ${bed.extubations}
                                 onClick={() => onSelectPatient(bed)}
                             >
                                 <Mic className="h-4 w-4" />
-                                Gravar / Editar
+                                Gravar Evolução
                             </Button>
                             <Button
                                 variant="outline"
@@ -164,7 +164,7 @@ Intercorrências: ${bed.extubations}
                                             onClick={() => onSelectPatient(bed)}
                                         >
                                             <Mic className="h-4 w-4" />
-                                            <span>Editar / Gravar</span>
+                                            <span>Gravar Evolução</span>
                                         </Button>
                                         <Button
                                             variant="outline"
