@@ -1,16 +1,20 @@
 
+
 export interface N8NResponse {
-    transcription: string;
-    ims_target: number;
-    ims_achieved: number;
-    days_on_vm: number;
-    extubations: number;
+    formatted_record: string;
+    bedNumber?: string;
+    metadata?: {
+        ims_target?: number;
+        ims_achieved?: number;
+        days_on_vm?: number;
+        extubations?: number;
+        vmi_start_date?: string;
+    };
 }
 
-export async function sendAudioToN8n(audioBlob: Blob, bedNumber: string): Promise<N8NResponse> {
+export async function sendAudioToN8n(audioBlob: Blob): Promise<N8NResponse> {
     const formData = new FormData();
     formData.append("file", audioBlob, "recording.webm");
-    formData.append("bedNumber", bedNumber);
 
     // Using the specific webhook URL provided by the user
     const WEBHOOK_URL = "https://webhook.privacygaby.online/webhook/andrea";
@@ -25,11 +29,22 @@ export async function sendAudioToN8n(audioBlob: Blob, bedNumber: string): Promis
             throw new Error(`N8N Webhook failed with status: ${response.status}`);
         }
 
-        const data = await response.json();
+        let data = await response.json();
 
-        // Validate response structure loosely
-        if (typeof data.ims_target === 'undefined' || typeof data.ims_achieved === 'undefined') {
-            console.warn("N8N response missing expected IMS fields", data);
+        // Handle n8n array response format
+        if (Array.isArray(data) && data.length > 0) {
+            // Check if nested inside "output" property (common in n8n)
+            if (data[0].output) {
+                data = data[0].output;
+            } else {
+                // otherwise just take the first item
+                data = data[0];
+            }
+        }
+
+        // Validate response structure
+        if (!data.formatted_record) {
+            console.warn("N8N response missing formatted_record", data);
         }
 
         return data as N8NResponse;
